@@ -1,0 +1,7 @@
+address of gaia.cs.umass.edu as per wireshark: 34.107.221.82
+address of my computer as per wireshark: 10.1.58.104
+
+filters -> used to analyze, save view, specific packets captured by wireshark
+to display the packets with given ip we use:
+ip.src == <ip address>
+ip.dst == <ip address>

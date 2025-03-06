@@ -1,0 +1,3 @@
+time stamp for get: 6.316578398
+time stamp for ok: 6.337905331
+tim differnce: 0.02132693299999999
