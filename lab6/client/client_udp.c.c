@@ -1,6 +1,6 @@
 /* Computer Networks
    UDP client
-   Team: Codaan(Sarthak && Ritu)
+   Team: Sarthak && Ritu
 */
 
 #include <netdb.h>
@@ -15,7 +15,7 @@
 #define BUF_SIZE    4096
 
 int main(int argc, char *argv[]) {
-    FILE *fp;
+    FILE *fp = NULL;
     struct hostent *hp;
     struct sockaddr_in sin;
     char *host;
@@ -25,7 +25,9 @@ int main(int argc, char *argv[]) {
 
     /*
     Modify the following code and use switches.
-    For example, switches I and P for IP address and Port, respectively.
+    For example, switches I and P for IP address and Port, respectively.venv ma install karvani instruction pn lakhi aapje
+
+i think i need to have a
     */
 
     if ((argc == 2) || (argc == 3)) {
@@ -36,7 +38,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (argc == 3) {
-        fp = fopen(argv[2], "w");
+        fp = fopen(argv[2], "wb");
         if (fp == NULL) {
             fprintf(stderr, "Error opening output file\n");
             exit(1);
@@ -67,7 +69,7 @@ int main(int argc, char *argv[]) {
     printf("To play the music, pipe the downlaod file to a player, e.g., ALSA, SOX, VLC: cat recvd_file.wav | vlc -\n");
 
     /* send message to server */
-    fgets(buf, sizeof(buf), stdin);
+    strcpy(buf, "GET");
     buf[BUF_SIZE - 1] = '\0';
     len = strlen(buf) + 1;
     if (sendto(s, buf, len, 0, (struct sockaddr *)&sin, sizeof(sin)) < 0) {
@@ -80,9 +82,37 @@ int main(int argc, char *argv[]) {
        or store as specified by they user. Use a switch to implement it. */
 
     /* Instead of recv(), change to recvfrom() call for receiving data */
-    recv(s, buf, sizeof(buf), 0);
+    while (1) {
+        socklen_t sin_len = sizeof(sin);
+        len = recvfrom(s, buf, sizeof(buf), 0, (struct sockaddr *)&sin, &sin_len);
+        if (len < 0) {
+            perror("Client: recvfrom()");
+            return 0;
+        }
 
-    /* Add code here to receive a file whether binary or text.
-    If the last 3 bytes from the server are "BYE", treat it as end of the file. */
-    fputs(buf, stdout);
+        if (len == 3 && strncmp(buf, "BYE", 3) == 0) {
+            printf("Transmission completed! End of file reached.\n");
+            break;
+        }
+
+        // output or save:
+        if (fp != NULL) {
+            // write to the file:
+            if (fwrite(buf, 1, len, fp) != len) {
+                perror("Error writing to file");
+                exit(1);
+            }
+        } else {
+            // write to the stdout:
+            if (fwrite(buf, 1, len, stdout) != len) {
+                perror("Error writing to stdout");
+                exit(1);
+            }
+            fflush(stdout);                                                  // Ensure data is sent to VLC immediately
+            fprintf(stderr, "Received and wrote %d bytes to stdout\n", len); // Debug output
+        }
+    }
+
+    if (fp != NULL) fclose(fp);
+    return 0;
 }
