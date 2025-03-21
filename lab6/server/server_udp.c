@@ -34,7 +34,8 @@ int main(int argc, char *argv[]) {
     /* For inserting delays, use nanosleep()
        struct timespec ... */
     struct timespec delay;
-    delay.tv_sec = 0;
+    delay.tv_sec = 1;
+    delay.tv_nsec = 1000000;
 
     /* Modify the following code and use switches.
     For example, switches P and F for IP address and a filename (if streaming), respectively.
@@ -43,7 +44,7 @@ int main(int argc, char *argv[]) {
     /*
      * ip address - i
      * filename - f
-     * port - p
+     * pot - p
      * payload size or BUF_SIZE - s
      * delay - d
      */
@@ -70,7 +71,7 @@ int main(int argc, char *argv[]) {
                     break;
                 case 'd':
                     delay.tv_sec = atoi(optarg);
-                    delay.tv_nsec = 0;
+                    delay.tv_nsec = 1000000;
                     break;
                 default:
                     fprintf(stderr, "usage: server -i serverIP -f filename -p port -s payload_size -d delay\n");
@@ -134,6 +135,11 @@ int main(int argc, char *argv[]) {
 
         printf("Sending file %s to client %s \n", filename, clientIP);
 
+        // measure time to transmit the file:
+        clock_t start, end;
+        double cpu_time_used;
+        start = clock( );
+
         while ((len = fread(buf, 1, BUF_SIZE, fp)) > 0) {
             /* Send to client */
             /* Add code to send file if the incoming message is GET */
@@ -152,6 +158,11 @@ int main(int argc, char *argv[]) {
         }
         // close the file pointer:
         fclose(fp);
+
+        // measure time to transmit the file:
+        end = clock( );
+        cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+        printf("Time taken to transmit the file: %f seconds\n", cpu_time_used);
 
         /* Send BYE to signal termination */
         strcpy(buf, "BYE");
