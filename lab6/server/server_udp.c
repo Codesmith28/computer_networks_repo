@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
     /* For inserting delays, use nanosleep()
        struct timespec ... */
     struct timespec delay;
-    delay.tv_sec = 1;
+    delay.tv_sec = 0;
     delay.tv_nsec = 1000000;
 
     /* Modify the following code and use switches.
