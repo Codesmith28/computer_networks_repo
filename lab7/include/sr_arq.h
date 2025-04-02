@@ -7,9 +7,9 @@
 #define WINDOW_SIZE ((MAX_SEQ + 1) / 2)
 
 struct Frame {
-    int seq;
+    int seq;                // Sequence number
     char data[BUFFER_SIZE]; // Use BUFFER_SIZE from common.h
-    int is_ack;
+    int is_ack;             // 0 for data, 1 for ack
 };
 
 // Server (Sender) Functions

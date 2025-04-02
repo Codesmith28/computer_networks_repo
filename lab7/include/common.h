@@ -2,14 +2,15 @@
 #define COMMON_H
 
 #include <arpa/inet.h>
+#include <netinet/in.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
 
-#define PORT        8080
-#define BUFFER_SIZE 1024
+#define PORT        8080 // The port number that the server will listen on
+#define BUFFER_SIZE 1024 // The maximum size of the buffer or payload size
 
 typedef enum { FILE_REQUEST = 0, ACKNOWLEDGEMENT = 1, FILE_INFO_AND_DATA = 2, DATA = 3, FILE_NOT_FOUND = 4 } message_type;
 
@@ -35,7 +36,7 @@ struct File_info_and_data {
     uint8_t filename_size;
     char *filename;
     // char filename[filename_size];
-    
+
     uint32_t file_size;
     uint16_t block_size;
     char *data;
