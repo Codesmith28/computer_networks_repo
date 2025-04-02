@@ -1,5 +1,5 @@
 /* Computer Networks
-   UDP client
+   UDP server
    Team: Sarthak && Ritu
 */
 
