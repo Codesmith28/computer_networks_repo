@@ -3,7 +3,6 @@
    Team: Sarthak && Ritu
 */
 
-#include "include/common.h"
 #include "include/sr_arq.h"
 #include <stdio.h>
 #include <unistd.h>
